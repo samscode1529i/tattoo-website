@@ -5,7 +5,7 @@ const exploreLinks = [
   { label: "Home", href: "/" },
   { label: "Portfolio", href: "#portfolio" },
   { label: "FAQ", href: "#FAQ" },
-  { label: "Contact Us", href: "#contact-us" },
+  { label: "Contact Us", href: "/contact-us" },
 ];
 
 const socialLinks = [
