@@ -4,6 +4,7 @@ import { useState } from "react";
 import { FaChevronRight } from "react-icons/fa";
 import { motion } from "motion/react";
 
+
 const faqs = [
   {
     question: "HOW DO I BOOK AN APPOINTMENT?",
@@ -64,12 +65,20 @@ export default function FAQ() {
         FREQUENTLY ASKED QUESTIONS
       </h2>
 
-      {/* Break */}
-      <img
-        src="/images/break1.png"
-        alt="section break"
-        className="mx-auto mt-6 h-[30px] w-[300px] object-cover"
-      />
+            {/* Break  */}
+            <motion.img 
+                src="/images/break1.png"
+                alt="break image"
+                className="mx-auto pt-5 object-cover w-[350px] h-[55] mb-16"
+                initial={{y: 100}}
+                whileInView={{y:0}}
+                viewport={{ once: true, amount:0.2 }}
+                transition={{
+                    type: "spring",
+                    stiffness: 100,
+                    damping: 12,
+                }}
+            />
 
       {/* Space */}
       <div className="h-20" />

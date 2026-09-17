@@ -26,7 +26,7 @@ const Body = () => {
             <motion.img 
                 src="/images/break1.png"
                 alt="break image"
-                className="mx-auto pt-5 object-cover w-[250px] h-[10] mb-16"
+                className="mx-auto pt-5 object-cover w-[350px] h-[60px] mb-16"
                 initial={{y: 100}}
                 whileInView={{y:0}}
                 viewport={{ once: true, amount:0.2 }}

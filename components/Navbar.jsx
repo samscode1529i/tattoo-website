@@ -11,7 +11,7 @@ const leftLinks = [
 
 const rightLinks = [
   { label: 'Portfolio', href: '#portfolio' },
-  { label: 'Contact', href: '#contact' },
+  { label: 'Contact', href: '/contact' },
 ];
 
 function NavLink({ href, label, onClick }) {
@@ -86,7 +86,7 @@ export default function Navbar() {
             <NavLink key={link.label} href={link.href} label={link.label} />
           ))}
           <a
-            href="#book"
+            href="/contact"
             className="bg-bone px-5 py-2.5 text-sm font-semibold text-ink-950 transition-colors hover:bg-[#E8750B] hover:text-bone"
           >
             Book me

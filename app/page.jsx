@@ -2,6 +2,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import Body from "@/components/Body";
 import FAQ from "@/components/Faq";
+import Contact from "@/components/Contact";
 
 export default function Home() {
   return (
