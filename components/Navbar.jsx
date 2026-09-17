@@ -5,12 +5,12 @@ import { useEffect, useState } from 'react';
 
 const leftLinks = [
   { label: 'Home', href: '/' },
-  { label: 'About Us', href: '#about-us' },
-  { label: 'FAQ', href: '#FAQ' },
+  { label: 'About Us', href: '/about' },
+  { label: 'FAQ', href: '/#FAQ' },
 ];
 
 const rightLinks = [
-  { label: 'Portfolio', href: '#portfolio' },
+  { label: 'Portfolio', href: '/portfolio' },
   { label: 'Contact', href: '/contact' },
 ];
 
