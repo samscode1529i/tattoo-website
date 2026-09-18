@@ -40,8 +40,8 @@ export default function Navbar() {
 
   return (
     <nav
-      className={`fixed inset-x-0 top-0 z-50 transition-colors duration-300 ${
-        scrolled ? 'bg-ink-900/60 ' : 'bg-transparent'
+      className={`fixed w-[100vw] inset-x-0 top-0 z-50 overflow-x-clip transition-colors duration-300 ${
+        scrolled ? "bg-ink-900/60" : "bg-transparent"
       }`}
     >
       <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-6 md:px-10">
@@ -74,11 +74,12 @@ export default function Navbar() {
 
         {/* Logo (center) */}
         
-          <a href="/"
-          className="flex-1 text-center font-display text-2xl tracking-wide text-bone md:flex-none md:text-3xl"
-        >
-          roaa.bayoumy
-        </a>
+          <a
+            href="/"
+            className="flex-1 text-center font-display text-2xl tracking-wide text-bone md:flex-none md:text-3xl"
+          >
+            roaa.bayoumy
+          </a>
 
         {/* Right links + Book me (desktop) */}
         <div className="hidden flex-1 items-center justify-end gap-8 md:flex">
@@ -96,37 +97,37 @@ export default function Navbar() {
 
       {/* Mobile menu panel */}
       {open && (
+      <div
+        className={`mx-6 overflow-hidden transition-all duration-300 ease-out md:hidden ${
+          open ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
+        }`}
+      >
         <div
-          className={`mx-6 overflow-hidden transition-all duration-300 ease-out md:hidden ${
-            open ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
+          className={`flex w-[90vw] flex-col gap-1 border border-ink-800 bg-ink-950/95 p-6 transition-transform duration-300 ease-out ${
+            open ? "translate-x-0" : "-translate-x-full"
           }`}
         >
-          <div
-            className={`flex flex-col gap-1 border border-ink-800 bg-ink-950/95 p-6 transition-transform duration-300 ease-out ${
-              open ? "translate-x-0" : "-translate-x-full"
-            }`}
-          >
-            {[...leftLinks, ...rightLinks].map((link) => (
-              <a
-                key={link.label}
-                href={link.href}
-                onClick={() => setOpen(false)}
-                className="py-3 text-base uppercase tracking-wide text-bone/90"
-              >
-                {link.label}
-              </a>
-            ))}
-
+          {[...leftLinks, ...rightLinks].map((link) => (
             <a
-              href="#book"
+              key={link.label}
+              href={link.href}
               onClick={() => setOpen(false)}
-              className="mt-2 bg-bone px-5 py-3 text-center text-sm font-medium text-ink-950"
+              className="py-3 text-base uppercase tracking-wide text-bone/90"
             >
-              Book me
+              {link.label}
             </a>
-          </div>
+          ))}
+
+          <a
+            href="/contact"
+            onClick={() => setOpen(false)}
+            className="mt-2 bg-bone px-5 py-3 text-center text-sm font-medium text-ink-950"
+          >
+            Book me
+          </a>
         </div>
-              )}
+      </div>
+)}  
     </nav>
   );
 }
