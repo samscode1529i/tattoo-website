@@ -25,6 +25,10 @@ export default function AdminPage() {
   const [uploading, setUploading] = useState(false);
   const [message, setMessage] = useState("");
 
+  const [portfolioImages, setPortfolioImages] = useState([]);
+  const [loadingImages, setLoadingImages] = useState(true);
+  const [deletingId, setDeletingId] = useState(null);
+
   useEffect(() => {
     const checkUser = async () => {
       const {
@@ -38,10 +42,30 @@ export default function AdminPage() {
 
       setUser(user);
       setLoading(false);
+
+      fetchPortfolio();
     };
 
     checkUser();
   }, [router]);
+
+  const fetchPortfolio = async () => {
+    setLoadingImages(true);
+
+    const { data, error } = await supabase
+      .from("portfolio")
+      .select("*")
+      .order("created_at", { ascending: false });
+
+    if (error) {
+      console.error("Error fetching portfolio:", error);
+      setLoadingImages(false);
+      return;
+    }
+
+    setPortfolioImages(data || []);
+    setLoadingImages(false);
+  };
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
@@ -104,11 +128,64 @@ export default function AdminPage() {
       setCategory("");
 
       e.target.reset();
+
+      fetchPortfolio();
     } catch (error) {
       console.error(error);
       setMessage(error.message || "Something went wrong.");
     } finally {
       setUploading(false);
+    }
+  };
+
+  const handleDelete = async (image) => {
+    const confirmed = window.confirm(
+      "Are you sure you want to delete this tattoo?"
+    );
+
+    if (!confirmed) {
+      return;
+    }
+
+    setDeletingId(image.id);
+    setMessage("");
+
+    try {
+      const imagePath = image.image_url.split(
+        "/storage/v1/object/public/portfolio-images/"
+      )[1];
+
+      if (!imagePath) {
+        throw new Error("Could not determine image storage path.");
+      }
+
+      const { error: storageError } = await supabase.storage
+        .from("portfolio-images")
+        .remove([imagePath]);
+
+      if (storageError) {
+        throw storageError;
+      }
+
+      const { error: databaseError } = await supabase
+        .from("portfolio")
+        .delete()
+        .eq("id", image.id);
+
+      if (databaseError) {
+        throw databaseError;
+      }
+
+      setPortfolioImages((current) =>
+        current.filter((item) => item.id !== image.id)
+      );
+
+      setMessage("Tattoo deleted successfully!");
+    } catch (error) {
+      console.error(error);
+      setMessage(error.message || "Could not delete tattoo.");
+    } finally {
+      setDeletingId(null);
     }
   };
 
@@ -126,6 +203,7 @@ export default function AdminPage() {
     <main className="min-h-screen bg-ink-950 px-6 py-12 md:px-12">
       <div className="mx-auto max-w-7xl">
 
+        {/* HEADER */}
         <div className="flex flex-col gap-6 border-b border-ink-800 pb-6 sm:flex-row sm:items-center sm:justify-between">
           <div>
             <h1 className="font-oswald text-4xl tracking-wide text-amber-100">
@@ -146,6 +224,7 @@ export default function AdminPage() {
           </button>
         </div>
 
+        {/* ADD TATTOO */}
         <section className="mt-12 max-w-2xl">
           <h2 className="font-oswald text-3xl tracking-wide text-amber-100">
             ADD TATTOO
@@ -159,7 +238,6 @@ export default function AdminPage() {
             onSubmit={handleUpload}
             className="mt-8 space-y-6 border border-ink-800 bg-ink-900 p-6 md:p-8"
           >
-
             <div>
               <label className="mb-2 block font-lato text-sm text-stone-300">
                 Tattoo Image
@@ -223,9 +301,70 @@ export default function AdminPage() {
             >
               {uploading ? "Uploading..." : "Upload Tattoo"}
             </button>
-
           </form>
         </section>
+
+        {/* MANAGE PORTFOLIO */}
+        <section className="mt-20">
+          <div className="border-b border-ink-800 pb-6">
+            <h2 className="font-oswald text-3xl tracking-wide text-amber-100">
+              MANAGE PORTFOLIO
+            </h2>
+
+            <p className="mt-2 font-lato text-sm text-stone-400">
+              Delete tattoos from your portfolio.
+            </p>
+          </div>
+
+          {loadingImages ? (
+            <p className="py-12 text-center font-lato text-sm text-stone-400">
+              Loading portfolio...
+            </p>
+          ) : portfolioImages.length === 0 ? (
+            <p className="py-12 text-center font-lato text-sm text-stone-400">
+              No tattoos uploaded yet.
+            </p>
+          ) : (
+            <div className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
+              {portfolioImages.map((image) => (
+                <div
+                  key={image.id}
+                  className="group overflow-hidden border border-ink-800 bg-ink-900"
+                >
+                  <div className="aspect-[222/278] overflow-hidden">
+                    <img
+                      src={image.image_url}
+                      alt={image.title || `${image.category} tattoo`}
+                      className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                    />
+                  </div>
+
+                  <div className="p-3">
+                    <p className="truncate font-lato text-xs font-semibold uppercase tracking-wide text-amber-100">
+                      {image.title || "Untitled"}
+                    </p>
+
+                    <p className="mt-1 font-lato text-[10px] uppercase tracking-wider text-stone-500">
+                      {image.category}
+                    </p>
+
+                    <button
+                      type="button"
+                      onClick={() => handleDelete(image)}
+                      disabled={deletingId === image.id}
+                      className="mt-3 w-full border border-red-500/40 px-3 py-2 font-lato text-[10px] font-semibold uppercase tracking-wide text-red-400 transition-colors hover:border-red-500 hover:bg-red-500 hover:text-white disabled:cursor-not-allowed disabled:opacity-50"
+                    >
+                      {deletingId === image.id
+                        ? "Deleting..."
+                        : "Delete"}
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </section>
+
       </div>
     </main>
   );

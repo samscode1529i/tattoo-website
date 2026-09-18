@@ -1,24 +1,36 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { motion } from "motion/react";
+import { supabase } from "@/lib/supabase";
 
 const Portfolio = () => {
-  const images = [
-    "/images/portfolio/p1.jpg",
-    "/images/portfolio/p2.png",
-    "/images/portfolio/p15.jpg",
-    "/images/portfolio/p3.png",
-    "/images/portfolio/p5.jpg",
-    "/images/portfolio/p6.jpg",
-    "/images/portfolio/p7.jpg",
-    "/images/portfolio/p8.jpg",
-    "/images/portfolio/p9.jpg",
-    "/images/portfolio/p12.jpg",
-  ];
+  const [images, setImages] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchPortfolio = async () => {
+      const { data, error } = await supabase
+      .from("portfolio")
+      .select("*")
+      .order("created_at", { ascending: false })
+      .limit(10);
+
+      if (error) {
+        console.error("Error fetching portfolio:", error);
+        setLoading(false);
+        return;
+      }
+
+      setImages(data || []);
+      setLoading(false);
+    };
+
+    fetchPortfolio();
+  }, []);
 
   return (
-    <section className="max-h-90vh mb-10 px-6 py-24 md:px-12 lg:px-20 bg-gray-900/20">
-      
+    <section className="max-h-90vh mb-10 bg-gray-900/20 px-6 py-24 md:px-12 lg:px-20">
 
       {/* Portfolio Heading */}
       <motion.h2
@@ -50,32 +62,41 @@ const Portfolio = () => {
         }}
       />
 
+      {/* Loading */}
+      {loading && (
+        <p className="text-center font-lato text-sm text-stone-400">
+          Loading portfolio...
+        </p>
+      )}
+
       {/* Portfolio Images */}
-      <div className="mx-auto grid max-w-7xl grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
+      {!loading && (
+        <div className="mx-auto grid max-w-7xl grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
 
-        {images.map((image, index) => (
-          <motion.div
-            key={image}
-            className="h-[155px] overflow-hidden"
-            initial={{ opacity: 0, y: 60 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.2 }}
-            transition={{
-              type: "spring",
-              stiffness: 100,
-              damping: 12,
-              delay: index * 0.08,
-            }}
-          >
-            <img
-              src={image}
-              alt={`Tattoo work ${index + 1}`}
-              className="h-full w-full object-cover transition-transform duration-700 hover:scale-105"
-            />
-          </motion.div>
-        ))}
+          {images.map((item, index) => (
+            <motion.div
+              key={item.id}
+              className="h-[155px] overflow-hidden"
+              initial={{ opacity: 0, y: 60 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.2 }}
+              transition={{
+                type: "spring",
+                stiffness: 100,
+                damping: 12,
+                delay: index * 0.08,
+              }}
+            >
+              <img
+                src={item.image_url}
+                alt={item.title || `Tattoo work ${index + 1}`}
+                className="h-full w-full object-cover transition-transform duration-700 hover:scale-105"
+              />
+            </motion.div>
+          ))}
 
-      </div>
+        </div>
+      )}
 
       {/* See More */}
       <motion.div
@@ -91,7 +112,7 @@ const Portfolio = () => {
       >
         <a
           href="/portfolio"
-          className="font-lato bg-gray-900/20 text-lg text-amber-100 underline underline-offset-8 transition-opacity hover:opacity-60"
+          className="bg-gray-900/20 font-lato text-lg text-amber-100 underline underline-offset-8 transition-opacity hover:opacity-60"
         >
           See more
         </a>

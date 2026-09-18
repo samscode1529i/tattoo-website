@@ -1,9 +1,11 @@
+
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "motion/react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import { supabase } from "@/lib/supabase";
 
 const categories = [
   "All",
@@ -15,111 +17,30 @@ const categories = [
   "Lettering",
 ];
 
-const portfolioImages = [
-  {
-    src: "/images/portfolio/p1.jpg",
-    category: "Fine Line",
-  },
-  {
-    src: "/images/portfolio/p2.png",
-    category: "Black & Bold",
-  },
-  {
-    src: "/images/portfolio/p3.png",
-    category: "Colour",
-  },
-  {
-    src: "/images/portfolio/p4.jpg",
-    category: "Anime",
-  },
-  {
-    src: "/images/portfolio/p5.jpg",
-    category: "Arabic",
-  },
-  {
-    src: "/images/portfolio/p6.jpg",
-    category: "Lettering",
-  },
-  {
-    src: "/images/portfolio/p7.jpg",
-    category: "Fine Line",
-  },
-  {
-    src: "/images/portfolio/p8.jpg",
-    category: "Black & Bold",
-  },
-  {
-    src: "/images/portfolio/p9.jpg",
-    category: "Colour",
-  },
-  {
-    src: "/images/portfolio/p10.jpg",
-    category: "Colour",
-  },
-  {
-    src: "/images/portfolio/p11.jpg",
-    category: "Colour",
-  },
-  {
-    src: "/images/portfolio/p12.jpg",
-    category: "Colour",
-  },
-  {
-    src: "/images/portfolio/p13.jpg",
-    category: "Colour",
-  },
-  {
-    src: "/images/portfolio/p14.jpg",
-    category: "Colour",
-  },
-  {
-    src: "/images/portfolio/p15.jpg",
-    category: "Colour",
-  },
-  {
-    src: "/images/portfolio/p16.jpg",
-    category: "Colour",
-  },
-  {
-    src: "/images/portfolio/p17.jpg",
-    category: "Colour",
-  },
-  {
-    src: "/images/portfolio/p18.jpg",
-    category: "Colour",
-  },
-  {
-    src: "/images/portfolio/p19.jpg",
-    category: "Colour",
-  },
-  {
-    src: "/images/portfolio/p20.jpg",
-    category: "Colour",
-  },
-  {
-    src: "/images/portfolio/p21.jpg",
-    category: "Colour",
-  },
-  {
-    src: "/images/portfolio/p22.jpg",
-    category: "Colour",
-  },
-  {
-    src: "/images/portfolio/p23.jpg",
-    category: "Colour",
-  },
-  {
-    src: "/images/portfolio/p24.jpg",
-    category: "Colour",
-  },
-  {
-    src: "/images/portfolio/p25.jpg",
-    category: "Colour",
-  },
-];
-
 export default function PortfolioPage() {
   const [activeCategory, setActiveCategory] = useState("All");
+  const [portfolioImages, setPortfolioImages] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchPortfolio = async () => {
+      const { data, error } = await supabase
+        .from("portfolio")
+        .select("*")
+        .order("created_at", { ascending: false });
+
+      if (error) {
+        console.error("Error fetching portfolio:", error);
+        setLoading(false);
+        return;
+      }
+
+      setPortfolioImages(data || []);
+      setLoading(false);
+    };
+
+    fetchPortfolio();
+  }, []);
 
   const filteredImages =
     activeCategory === "All"
@@ -133,6 +54,7 @@ export default function PortfolioPage() {
       {/* HEADER */}
       <header className="bg-ink-950">
         <Navbar />
+
         <div className="px-6 pb-16 pt-32 md:px-12 lg:px-20">
           <motion.h1
             className="text-center font-oswald text-5xl font-medium tracking-tight text-amber-100 md:text-7xl"
@@ -202,40 +124,49 @@ export default function PortfolioPage() {
             })}
           </div>
 
-          {/* IMAGE GRID */}
-          <motion.div
-            layout
-            className="grid grid-cols-2 gap-[2px] sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5"
-          >
-            {filteredImages.map((image, index) => (
-              <motion.div
-                layout
-                key={image.src}
-                initial={{ opacity: 0, y: 50 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{
-                  type: "spring",
-                  stiffness: 100,
-                  damping: 12,
-                  delay: index * 0.04,
-                }}
-                className="group relative aspect-[222/278] overflow-hidden"
-              >
-                <img
-                  src={image.src}
-                  alt={`${image.category} tattoo`}
-                  className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-                />
+          {/* LOADING */}
+          {loading && (
+            <p className="py-20 text-center font-lato text-sm text-stone-400">
+              Loading portfolio...
+            </p>
+          )}
 
-                {/* CATEGORY LABEL */}
-                <div className="absolute bottom-0 left-0 right-0 translate-y-full bg-ink-950/90 px-3 py-2 transition-transform duration-300 group-hover:translate-y-0">
-                  <p className="font-lato text-[10px] font-semibold uppercase tracking-wider text-amber-100">
-                    {image.category}
-                  </p>
-                </div>
-              </motion.div>
-            ))}
-          </motion.div>
+          {/* IMAGE GRID */}
+          {!loading && (
+            <motion.div
+              layout
+              className="grid grid-cols-2 gap-[2px] sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5"
+            >
+              {filteredImages.map((image, index) => (
+                <motion.div
+                  layout
+                  key={image.id}
+                  initial={{ opacity: 0, y: 50 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{
+                    type: "spring",
+                    stiffness: 100,
+                    damping: 12,
+                    delay: index * 0.04,
+                  }}
+                  className="group relative aspect-[222/278] overflow-hidden"
+                >
+                  <img
+                    src={image.image_url}
+                    alt={`${image.category} tattoo`}
+                    className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  />
+
+                  {/* CATEGORY LABEL */}
+                  <div className="absolute bottom-0 left-0 right-0 translate-y-full bg-ink-950/90 px-3 py-2 transition-transform duration-300 group-hover:translate-y-0">
+                    <p className="font-lato text-[10px] font-semibold uppercase tracking-wider text-amber-100">
+                      {image.category}
+                    </p>
+                  </div>
+                </motion.div>
+              ))}
+            </motion.div>
+          )}
 
         </div>
 
