@@ -7,7 +7,35 @@
       "static/media/345c85a432359eed-s.p.0zem_9y19rte6.woff2",
       "static/media/7ddd198311ba7843-s.p.3kq6k02b2ysv1.woff2"
     ],
+    "[project]/app/about/page": [
+      "static/media/fabcf92ba1ccea36-s.p.1w_qz2ahumqmz.woff2",
+      "static/media/9a800f173b8d9e8f-s.p.3nglv5iys3s0a.woff2",
+      "static/media/8e451580e5e95631-s.p.27vw08z6_vw0m.woff2",
+      "static/media/345c85a432359eed-s.p.0zem_9y19rte6.woff2",
+      "static/media/7ddd198311ba7843-s.p.3kq6k02b2ysv1.woff2"
+    ],
+    "[project]/app/admin/login/page": [
+      "static/media/fabcf92ba1ccea36-s.p.1w_qz2ahumqmz.woff2",
+      "static/media/9a800f173b8d9e8f-s.p.3nglv5iys3s0a.woff2",
+      "static/media/8e451580e5e95631-s.p.27vw08z6_vw0m.woff2",
+      "static/media/345c85a432359eed-s.p.0zem_9y19rte6.woff2",
+      "static/media/7ddd198311ba7843-s.p.3kq6k02b2ysv1.woff2"
+    ],
+    "[project]/app/contact/page": [
+      "static/media/fabcf92ba1ccea36-s.p.1w_qz2ahumqmz.woff2",
+      "static/media/9a800f173b8d9e8f-s.p.3nglv5iys3s0a.woff2",
+      "static/media/8e451580e5e95631-s.p.27vw08z6_vw0m.woff2",
+      "static/media/345c85a432359eed-s.p.0zem_9y19rte6.woff2",
+      "static/media/7ddd198311ba7843-s.p.3kq6k02b2ysv1.woff2"
+    ],
     "[project]/app/page": [
+      "static/media/fabcf92ba1ccea36-s.p.1w_qz2ahumqmz.woff2",
+      "static/media/9a800f173b8d9e8f-s.p.3nglv5iys3s0a.woff2",
+      "static/media/8e451580e5e95631-s.p.27vw08z6_vw0m.woff2",
+      "static/media/345c85a432359eed-s.p.0zem_9y19rte6.woff2",
+      "static/media/7ddd198311ba7843-s.p.3kq6k02b2ysv1.woff2"
+    ],
+    "[project]/app/portfolio/page": [
       "static/media/fabcf92ba1ccea36-s.p.1w_qz2ahumqmz.woff2",
       "static/media/9a800f173b8d9e8f-s.p.3nglv5iys3s0a.woff2",
       "static/media/8e451580e5e95631-s.p.27vw08z6_vw0m.woff2",
