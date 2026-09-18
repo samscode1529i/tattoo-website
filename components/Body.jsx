@@ -103,9 +103,12 @@ const Body = () => {
             damping: 12,
           }}
         >
-          <button className="bg-bone px-5 py-2.5 text-sm font-semibold text-ink-950 transition-colors hover:bg-[#E8750B] hover:text-bone">
+            <a
+            href="/about"
+            className="bg-bone px-5 py-2.5 text-sm font-semibold text-ink-950 transition-colors hover:bg-[#E8750B] hover:text-bone"
+            >
             Learn More
-          </button>
+            </a>
         </motion.div>
       </section>
 

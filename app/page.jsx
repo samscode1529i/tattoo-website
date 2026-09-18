@@ -30,7 +30,7 @@ export default function Home() {
           </p>
 
           <a
-            href="#book"
+            href="/contact"
             className="mt-8 inline-block bg-bone px-8 py-3.5 text-sm font-semibold uppercase tracking-wide text-ink-950 transition-colors hover:bg-ember hover:text-bone"
           >
             Book me

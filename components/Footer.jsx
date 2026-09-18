@@ -3,8 +3,8 @@ import { FaTiktok } from "react-icons/fa6";
 
 const exploreLinks = [
   { label: "Home", href: "/" },
-  { label: "Portfolio", href: "#portfolio" },
-  { label: "FAQ", href: "#FAQ" },
+  { label: "Portfolio", href: "/portfolio" },
+  { label: "FAQ", href: "/#FAQ" },
   { label: "Contact Us", href: "/contact-us" },
 ];
 

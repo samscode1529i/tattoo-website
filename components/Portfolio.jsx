@@ -90,7 +90,7 @@ const Portfolio = () => {
         }}
       >
         <a
-          href="#portfolio"
+          href="/portfolio"
           className="font-lato bg-gray-900/20 text-lg text-amber-100 underline underline-offset-8 transition-opacity hover:opacity-60"
         >
           See more
